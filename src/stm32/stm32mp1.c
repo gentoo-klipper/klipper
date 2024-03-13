@@ -201,3 +201,23 @@ void armcm_main(void) {
 	sched_main();
 }
 
+extern uint32_t _sbss, _ebss, _stack_start;
+extern uint32_t _stack_end;
+
+void IrqTrap(const char *name) {
+	for (;;)
+		;
+}
+
+#define IRQH(IN) void IN##_Handler() { IrqTrap(#IN); } DECL_ARMCM_IRQ(IN##_Handler, IN##_IRQn);
+
+IRQH(NonMaskableInt)
+IRQH(HardFault)
+IRQH(MemoryManagement)
+IRQH(BusFault)
+IRQH(UsageFault)
+IRQH(SVCall)
+IRQH(DebugMonitor)
+IRQH(PendSV)
+//IRQH(SysTick)
+
